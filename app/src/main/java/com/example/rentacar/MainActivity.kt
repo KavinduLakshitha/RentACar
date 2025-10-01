@@ -1,11 +1,13 @@
 package com.example.rentacar
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.parcelize.Parcelize
+import androidx.core.graphics.toColorInt
 
 @Parcelize
 data class Car(
@@ -20,16 +22,21 @@ data class Car(
     var isRented: Boolean = false
 ) : Parcelable
 
+@SuppressLint("UseSwitchCompatOrMaterialCode")
 class MainActivity : AppCompatActivity() {
 
     // UI Components
     private lateinit var mainScrollView: ScrollView
+    private lateinit var mainHeaderLayout: LinearLayout
+    private lateinit var appTitleText: TextView
+    private lateinit var creditBalanceCard: LinearLayout
     private lateinit var creditBalanceText: TextView
     private lateinit var darkModeSwitch: Switch
     private lateinit var searchEditText: EditText
     private lateinit var sortButton: Button
     private lateinit var favoritesSection: LinearLayout
     private lateinit var favoritesListText: TextView
+    private lateinit var carDisplayCard: LinearLayout
     private lateinit var carCounterText: TextView
     private lateinit var carImageView: ImageView
     private lateinit var favoriteButton: Button
@@ -52,11 +59,11 @@ class MainActivity : AppCompatActivity() {
         Car("Tesla", "Model 3", 2023, 4.8f, 10000, 75.0, "car_tesla"),
         Car("Ford", "Mustang", 2020, 4.2f, 45000, 55.0, "car_ford")
     )
-    
+
     // Credit balance
     private var creditBalance = 500.0
     private val maxRentalCost = 400.0
-    
+
     // Current state
     private var currentCarIndex = 0
     private var displayedCars = mutableListOf<Car>()
@@ -71,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
-        
+
         initializeViews()
         updateDisplayedCars()
         displayCurrentCar()
@@ -82,12 +89,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializeViews() {
         mainScrollView = findViewById(R.id.mainScrollView)
+        mainHeaderLayout = findViewById(R.id.mainHeaderLayout)
+        appTitleText = findViewById(R.id.appTitleText)
+        creditBalanceCard = findViewById(R.id.creditBalanceCard)
         creditBalanceText = findViewById(R.id.creditBalanceText)
         darkModeSwitch = findViewById(R.id.darkModeSwitch)
         searchEditText = findViewById(R.id.searchEditText)
         sortButton = findViewById(R.id.sortButton)
         favoritesSection = findViewById(R.id.favoritesSection)
         favoritesListText = findViewById(R.id.favoritesListText)
+        carDisplayCard = findViewById(R.id.carDisplayCard)
         carCounterText = findViewById(R.id.carCounterText)
         carImageView = findViewById(R.id.carImageView)
         favoriteButton = findViewById(R.id.favoriteButton)
@@ -163,11 +174,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateDisplayedCars() {
         val searchQuery = searchEditText.text.toString().lowercase().trim()
-        
+
         // Filter: show only non-rented cars that match search
         displayedCars = allCars.filter { car ->
-            !car.isRented && (searchQuery.isEmpty() || 
-                car.name.lowercase().contains(searchQuery) || 
+            !car.isRented && (searchQuery.isEmpty() ||
+                car.name.lowercase().contains(searchQuery) ||
                 car.model.lowercase().contains(searchQuery))
         }.toMutableList()
 
@@ -194,6 +205,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n", "DefaultLocale", "DiscouragedApi")
     private fun displayCurrentCar() {
         if (displayedCars.isEmpty()) {
             carNameText.text = "No cars available"
@@ -202,10 +214,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         val car = displayedCars[currentCarIndex]
-        
+
         // Update counter
         carCounterText.text = "Car ${currentCarIndex + 1} of ${displayedCars.size}"
-        
+
         // Update car details
         carNameText.text = car.name
         carModelText.text = car.model
@@ -214,10 +226,10 @@ class MainActivity : AppCompatActivity() {
         carRatingText.text = "(${car.rating})"
         carKilometresText.text = String.format("%,d km", car.kilometres)
         carCostText.text = "${car.dailyRentalCost.toInt()} credits/day"
-        
+
         // Update favorite button
         updateFavoriteButton(car)
-        
+
         // Update rent button
         if (car.isRented) {
             rentButton.text = "Already Rented"
@@ -226,7 +238,7 @@ class MainActivity : AppCompatActivity() {
             rentButton.text = "Rent This Car"
             rentButton.isEnabled = true
         }
-        
+
         // Set car image from resource
         try {
             val imageRes = resources.getIdentifier(car.imageResource, "drawable", packageName)
@@ -236,11 +248,11 @@ class MainActivity : AppCompatActivity() {
                 // Fallback to placeholder if image not found
                 carImageView.setImageResource(android.R.drawable.ic_menu_gallery)
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             // Fallback to placeholder
             carImageView.setImageResource(android.R.drawable.ic_menu_gallery)
         }
-        
+
         // Update navigation buttons
         previousButton.isEnabled = currentCarIndex > 0
         nextButton.isEnabled = currentCarIndex < displayedCars.size - 1
@@ -248,21 +260,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun toggleFavorite() {
         if (displayedCars.isEmpty()) return
-        
+
         val car = displayedCars[currentCarIndex]
         // Find the car in allCars and toggle favorite
         val carInList = allCars.find { it.name == car.name && it.model == car.model }
         carInList?.isFavorite = !car.isFavorite
-        
+
         // Update displayed list
         updateDisplayedCars()
         displayCurrentCar()
         updateFavoritesSection()
-        
+
         val message = if (carInList?.isFavorite == true) "Added to favorites" else "Removed from favorites"
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateFavoriteButton(car: Car) {
         if (car.isFavorite) {
             favoriteButton.text = "★ Remove from Favorites"
@@ -273,13 +286,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateFavoritesSection() {
         val favorites = allCars.filter { it.isFavorite }
-        
+
         if (favorites.isEmpty()) {
             favoritesSection.visibility = android.view.View.GONE
         } else {
             favoritesSection.visibility = android.view.View.VISIBLE
-            val favoritesList = favorites.joinToString("\n") { 
-                "• ${it.name} ${it.model} (${it.year})" 
+
+            // Create a more compact, better formatted list
+            val favoritesList = buildString {
+                favorites.forEachIndexed { index, car ->
+                    val statusIcon = if (car.isRented) "🔒 " else "⭐ "
+                    val status = if (car.isRented) " (Rented)" else ""
+                    append("$statusIcon${car.name} ${car.model} ${car.year}$status")
+                    if (index < favorites.size - 1) append("\n")
+                }
             }
             favoritesListText.text = favoritesList
         }
@@ -287,7 +307,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showSortMenu() {
         val options = arrayOf("None", "Rating (High to Low)", "Year (Newest to Oldest)", "Cost (Low to High)")
-        
+
         androidx.appcompat.app.AlertDialog.Builder(this)
             .setTitle("Sort Cars By")
             .setItems(options) { _, which ->
@@ -305,33 +325,34 @@ class MainActivity : AppCompatActivity() {
             putExtra("selected_car", car)
             putExtra("current_balance", creditBalance)
             putExtra("max_rental_cost", maxRentalCost)
+            putExtra("is_dark_mode", isDarkMode)
         }
         startActivityForResult(intent, REQUEST_CODE_BOOKING)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        
+
         if (requestCode == REQUEST_CODE_BOOKING && resultCode == RESULT_OK) {
             val bookingConfirmed = data?.getBooleanExtra("booking_confirmed", false) ?: false
             val bookingCancelled = data?.getBooleanExtra("booking_cancelled", false) ?: false
             val carName = data?.getStringExtra("car_name") ?: ""
             val carModel = data?.getStringExtra("car_model") ?: ""
             val totalCost = data?.getDoubleExtra("total_cost", 0.0) ?: 0.0
-            
+
             if (bookingConfirmed) {
                 // Deduct from balance
                 creditBalance -= totalCost
                 updateCreditBalance()
-                
+
                 // Mark car as rented
                 val car = allCars.find { it.name == carName && it.model == carModel }
                 car?.isRented = true
-                
+
                 // Update display
                 updateDisplayedCars()
                 displayCurrentCar()
-                
+
                 Toast.makeText(this, "Car rented successfully! Remaining balance: ${creditBalance.toInt()} credits", Toast.LENGTH_LONG).show()
             } else if (bookingCancelled) {
                 // Restore car and balance
@@ -350,24 +371,38 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateCreditBalance() {
         creditBalanceText.text = creditBalance.toInt().toString()
-        
+
         // Change color based on balance
         val color = when {
-            creditBalance >= 400 -> android.graphics.Color.parseColor("#2E7D32") // Green
-            creditBalance >= 200 -> android.graphics.Color.parseColor("#F57C00") // Orange
-            else -> android.graphics.Color.parseColor("#C62828") // Red
+            creditBalance >= 400 -> "#2E7D32".toColorInt() // Green
+            creditBalance >= 200 -> "#F57C00".toColorInt() // Orange
+            else -> "#C62828".toColorInt() // Red
         }
         creditBalanceText.setTextColor(color)
     }
 
     private fun applyTheme() {
-        val bgColor = if (isDarkMode) android.graphics.Color.parseColor("#121212") else android.graphics.Color.parseColor("#F5F5F5")
-        val cardBgColor = if (isDarkMode) android.graphics.Color.parseColor("#1E1E1E") else android.graphics.Color.parseColor("#FFFFFF")
-        val textColor = if (isDarkMode) android.graphics.Color.parseColor("#E0E0E0") else android.graphics.Color.parseColor("#333333")
-        val secondaryTextColor = if (isDarkMode) android.graphics.Color.parseColor("#B0B0B0") else android.graphics.Color.parseColor("#666666")
+        val bgColor = if (isDarkMode) "#121212".toColorInt() else "#F5F5F5".toColorInt()
+        val cardBgColor = if (isDarkMode) "#1E1E1E".toColorInt() else "#FFFFFF".toColorInt()
+        val headerBgColor = if (isDarkMode) "#1E1E1E".toColorInt() else "#FFFFFF".toColorInt()
+        val textColor = if (isDarkMode) "#E0E0E0".toColorInt() else "#333333".toColorInt()
+        val secondaryTextColor = if (isDarkMode) "#B0B0B0".toColorInt() else "#666666".toColorInt()
+        val inputBgColor = if (isDarkMode) "#2C2C2C".toColorInt() else "#FFFFFF".toColorInt()
+        val hintColor = if (isDarkMode) "#888888".toColorInt() else "#999999".toColorInt()
+        val buttonTextColor = if (isDarkMode) "#E0E0E0".toColorInt() else "#333333".toColorInt()
+        val creditCardBgColor = if (isDarkMode) "#2C2C2C".toColorInt() else "#F5F5F5".toColorInt()
 
         mainScrollView.setBackgroundColor(bgColor)
-        
+
+        // Update header
+        mainHeaderLayout.setBackgroundColor(headerBgColor)
+        appTitleText.setTextColor(textColor)
+        creditBalanceCard.setBackgroundColor(creditCardBgColor)
+
+        // Update card backgrounds
+        carDisplayCard.setBackgroundColor(cardBgColor)
+        favoritesSection.setBackgroundColor(cardBgColor)
+
         // Update text colors
         carNameText.setTextColor(textColor)
         carModelText.setTextColor(textColor)
@@ -375,7 +410,22 @@ class MainActivity : AppCompatActivity() {
         carKilometresText.setTextColor(textColor)
         carCounterText.setTextColor(secondaryTextColor)
         carRatingText.setTextColor(secondaryTextColor)
-        
+
+        // Update search bar
+        searchEditText.setBackgroundColor(inputBgColor)
+        searchEditText.setTextColor(textColor)
+        searchEditText.setHintTextColor(hintColor)
+
+        // Update button text colors
+        favoriteButton.setTextColor(buttonTextColor)
+        previousButton.setTextColor(buttonTextColor)
+        nextButton.setTextColor(buttonTextColor)
+        sortButton.setTextColor(buttonTextColor)
+        rentButton.setTextColor("#FFFFFF".toColorInt()) // Keep white for primary button
+
+        // Update favorites list text
+        favoritesListText.setTextColor(secondaryTextColor)
+
         Toast.makeText(this, if (isDarkMode) "Dark mode enabled" else "Light mode enabled", Toast.LENGTH_SHORT).show()
     }
 }

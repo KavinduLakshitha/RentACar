@@ -60,4 +60,6 @@
     <string name="_5_seats">5 seats</string>
     <string name="gps_bluetooth_ac">GPS • Bluetooth • AC</string>
     <string name="_45_day">$45/day</string>
+    <string name="save_booking">Save Booking</string>
+    <string name="cancel">Cancel</string>
 </resources>

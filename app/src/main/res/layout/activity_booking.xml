@@ -15,41 +15,51 @@
 
         <!-- Header with Back Button -->
         <LinearLayout
+            android:id="@+id/bookingHeaderLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:background="@drawable/header_gradient"
+            android:background="#FFFFFF"
             android:padding="16dp"
+            android:paddingTop="48dp"
             android:layout_marginBottom="16dp"
-            android:elevation="4dp">
+            android:elevation="3dp"
+            android:fitsSystemWindows="true">
 
-            <Button
+            <TextView
                 android:id="@+id/backButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:text="←"
-                android:textSize="20sp"
-                android:textColor="#FFFFFF"
-                android:background="@drawable/button_outline"
-                android:layout_marginEnd="16dp" />
+                android:textSize="28sp"
+                android:gravity="center"
+                android:textColor="#333333"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true" />
 
             <TextView
+                android:id="@+id/bookingHeaderTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Complete Your Booking"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF" />
+                android:textColor="#333333"
+                android:gravity="center"
+                android:layout_marginEnd="48dp" />
 
         </LinearLayout>
 
         <!-- Car Details Card -->
         <LinearLayout
+            android:id="@+id/carDetailsCard"
             style="@style/CardContainer">
 
             <TextView
+                android:id="@+id/carDetailsHeader"
                 style="@style/SectionHeaderText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,12 +72,11 @@
 
                 <ImageView
                     android:id="@+id/carImageView"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:background="@drawable/image_background"
-                    android:padding="4dp"
+                    android:layout_width="120dp"
+                    android:layout_height="90dp"
+                    android:padding="0dp"
                     android:scaleType="centerCrop"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="12dp"
                     android:contentDescription="Selected Car" />
 
                 <LinearLayout
@@ -125,9 +134,11 @@
 
         <!-- Rental Period Card -->
         <LinearLayout
+            android:id="@+id/rentalDurationCard"
             style="@style/CardContainer">
 
             <TextView
+                android:id="@+id/rentalDurationHeader"
                 style="@style/SectionHeaderText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -141,6 +152,7 @@
                 android:layout_marginBottom="12dp">
 
                 <TextView
+                    android:id="@+id/daysLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Number of Days: "
@@ -175,6 +187,7 @@
                 android:layout_marginBottom="12dp" />
 
             <TextView
+                android:id="@+id/sliderDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Slide to select rental duration (1-7 days)"
@@ -187,15 +200,18 @@
 
         <!-- Customer Information Card -->
         <LinearLayout
+            android:id="@+id/customerInfoCard"
             style="@style/CardContainer">
 
             <TextView
+                android:id="@+id/customerInfoHeader"
                 style="@style/SectionHeaderText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Customer Information" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nameInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp">
@@ -252,6 +268,7 @@
                 android:gravity="center_vertical">
 
                 <TextView
+                    android:id="@+id/ageLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Age: "
@@ -272,9 +289,11 @@
 
         <!-- Additional Options Card -->
         <LinearLayout
+            android:id="@+id/additionalOptionsCard"
             style="@style/CardContainer">
 
             <TextView
+                android:id="@+id/additionalOptionsHeader"
                 style="@style/SectionHeaderText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -292,9 +311,11 @@
 
         <!-- Price Summary Card -->
         <LinearLayout
+            android:id="@+id/priceSummaryCard"
             style="@style/CardContainer">
 
             <TextView
+                android:id="@+id/priceSummaryHeader"
                 style="@style/SectionHeaderText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -315,6 +336,7 @@
 
         <!-- Action Buttons -->
         <LinearLayout
+            style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -322,26 +344,28 @@
 
             <Button
                 android:id="@+id/cancelButton"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_height="56dp"
                 android:layout_weight="1"
-                android:text="Cancel"
-                android:textSize="18sp"
+                android:text="@string/cancel"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:background="@drawable/button_outline"
                 android:layout_marginEnd="8dp" />
 
             <Button
                 android:id="@+id/saveButton"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_height="56dp"
                 android:layout_weight="1"
-                android:text="Save Booking"
-                android:textSize="18sp"
+                android:text="@string/save_booking"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"
                 android:background="@drawable/button_primary"
-                android:elevation="4dp"
+                android:elevation="2dp"
                 android:layout_marginStart="8dp" />
 
         </LinearLayout>

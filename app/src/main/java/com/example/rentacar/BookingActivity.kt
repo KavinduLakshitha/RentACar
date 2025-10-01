@@ -30,15 +30,17 @@ class BookingActivity : AppCompatActivity() {
     private lateinit var totalPriceText: TextView
     private lateinit var saveButton: Button
     private lateinit var cancelButton: Button
-    private lateinit var backButton: Button
+    private lateinit var backButton: TextView
 
     private var rentalDays = 1
     private var currentBalance = 500.0
     private var maxRentalCost = 400.0
+    private var isDarkMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_booking)
+        supportActionBar?.hide()
 
         // Get the car data and balance from intent (using modern API)
         selectedCar = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -49,6 +51,7 @@ class BookingActivity : AppCompatActivity() {
         }
         currentBalance = intent.getDoubleExtra("current_balance", 500.0)
         maxRentalCost = intent.getDoubleExtra("max_rental_cost", 400.0)
+        isDarkMode = intent.getBooleanExtra("is_dark_mode", false)
 
         initializeViews()
         setupCarDetails()
@@ -60,6 +63,11 @@ class BookingActivity : AppCompatActivity() {
 
         // Initial price calculation
         calculateTotalPrice()
+        
+        // Apply dark mode if enabled
+        if (isDarkMode) {
+            applyDarkMode()
+        }
     }
 
     private fun setupBackPressHandler() {
@@ -184,10 +192,17 @@ class BookingActivity : AppCompatActivity() {
         totalPriceText.text = priceBreakdown
 
         // Change total price text color if there's an issue
+        // Use appropriate colors based on dark mode
+        val normalTextColor = if (isDarkMode) {
+            android.graphics.Color.parseColor("#E0E0E0") // Light for dark mode
+        } else {
+            android.graphics.Color.parseColor("#333333") // Dark for light mode
+        }
+        
         val textColor = when {
             totalCost > maxRentalCost || totalCost > currentBalance ->
-                android.graphics.Color.parseColor("#C62828") // Red
-            else -> android.graphics.Color.parseColor("#333333") // Default
+                android.graphics.Color.parseColor("#C62828") // Red for errors (same in both modes)
+            else -> normalTextColor
         }
         totalPriceText.setTextColor(textColor)
     }
@@ -341,5 +356,122 @@ class BookingActivity : AppCompatActivity() {
         setResult(RESULT_OK, resultIntent)
         Toast.makeText(this, "Booking cancelled", Toast.LENGTH_SHORT).show()
         finish()
+    }
+
+    private fun applyDarkMode() {
+        val bgColor = android.graphics.Color.parseColor("#121212")
+        val cardBgColor = android.graphics.Color.parseColor("#1E1E1E")
+        val textColor = android.graphics.Color.parseColor("#E0E0E0")
+        val secondaryTextColor = android.graphics.Color.parseColor("#B0B0B0")
+        val inputBgColor = android.graphics.Color.parseColor("#2C2C2C")
+        val hintColor = android.graphics.Color.parseColor("#888888")
+
+        // Apply to main scroll view
+        mainScrollView.setBackgroundColor(bgColor)
+
+        // Find and update all card containers
+        val carDetailsCard = findViewById<LinearLayout>(R.id.carDetailsCard)
+        val rentalDurationCard = findViewById<LinearLayout>(R.id.rentalDurationCard)
+        val customerInfoCard = findViewById<LinearLayout>(R.id.customerInfoCard)
+        val additionalOptionsCard = findViewById<LinearLayout>(R.id.additionalOptionsCard)
+        val priceSummaryCard = findViewById<LinearLayout>(R.id.priceSummaryCard)
+
+        carDetailsCard?.setBackgroundColor(cardBgColor)
+        rentalDurationCard?.setBackgroundColor(cardBgColor)
+        customerInfoCard?.setBackgroundColor(cardBgColor)
+        additionalOptionsCard?.setBackgroundColor(cardBgColor)
+        priceSummaryCard?.setBackgroundColor(cardBgColor)
+
+        // Update main text colors
+        carNameText.setTextColor(textColor)
+        carTypeText.setTextColor(textColor)
+        carFeaturesText.setTextColor(secondaryTextColor)
+        totalPriceText.setTextColor(textColor)
+
+        // Update section header colors
+        val sectionHeaders = listOf(
+            findViewById<TextView>(R.id.carDetailsHeader),
+            findViewById<TextView>(R.id.rentalDurationHeader),
+            findViewById<TextView>(R.id.customerInfoHeader),
+            findViewById<TextView>(R.id.additionalOptionsHeader),
+            findViewById<TextView>(R.id.priceSummaryHeader)
+        )
+        sectionHeaders.forEach { it?.setTextColor(textColor) }
+
+        // Update input fields - background and text color
+        customerNameEdit.setBackgroundColor(inputBgColor)
+        customerNameEdit.setTextColor(textColor)
+        customerNameEdit.setHintTextColor(hintColor)
+
+        // Fix TextInputLayout hint color for Full Name field
+        val nameInputLayout = findViewById<com.google.android.material.textfield.TextInputLayout>(R.id.nameInputLayout)
+        nameInputLayout?.setHintTextColor(android.content.res.ColorStateList.valueOf(hintColor))
+        nameInputLayout?.defaultHintTextColor = android.content.res.ColorStateList.valueOf(hintColor)
+
+        customerEmailEdit.setBackgroundColor(inputBgColor)
+        customerEmailEdit.setTextColor(textColor)
+        customerEmailEdit.setHintTextColor(hintColor)
+
+        customerPhoneEdit.setBackgroundColor(inputBgColor)
+        customerPhoneEdit.setTextColor(textColor)
+        customerPhoneEdit.setHintTextColor(hintColor)
+
+        driverLicenseEdit.setBackgroundColor(inputBgColor)
+        driverLicenseEdit.setTextColor(textColor)
+        driverLicenseEdit.setHintTextColor(hintColor)
+
+        // Update labels
+        val ageLabel = findViewById<TextView>(R.id.ageLabel)
+        ageLabel?.setTextColor(textColor)
+
+        val daysLabel = findViewById<TextView>(R.id.daysLabel)
+        daysLabel?.setTextColor(textColor)
+
+        daysCountText.setTextColor(textColor)
+
+        // Update Age Spinner
+        ageSpinner.setBackgroundColor(inputBgColor)
+        // Force the spinner popup to use dark colors by recreating the adapter
+        val currentSelection = ageSpinner.selectedItemPosition
+        val ages = (18..80).map { "$it years" }
+        val darkAdapter = object : ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ages) {
+            override fun getView(position: Int, convertView: android.view.View?, parent: android.view.ViewGroup): android.view.View {
+                val view = super.getView(position, convertView, parent) as TextView
+                view.setTextColor(textColor)
+                return view
+            }
+            
+            override fun getDropDownView(position: Int, convertView: android.view.View?, parent: android.view.ViewGroup): android.view.View {
+                val view = super.getDropDownView(position, convertView, parent) as TextView
+                view.setTextColor(textColor)
+                view.setBackgroundColor(inputBgColor)
+                return view
+            }
+        }
+        darkAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        ageSpinner.adapter = darkAdapter
+        ageSpinner.setSelection(currentSelection)
+
+        // Update checkbox text
+        insuranceCheckBox.setTextColor(textColor)
+
+        // Update slider description
+        val sliderDescription = findViewById<TextView>(R.id.sliderDescription)
+        sliderDescription?.setTextColor(secondaryTextColor)
+
+        // Update header
+        val bookingHeaderLayout = findViewById<LinearLayout>(R.id.bookingHeaderLayout)
+        bookingHeaderLayout?.setBackgroundColor(cardBgColor)
+        
+        val bookingHeaderTitle = findViewById<TextView>(R.id.bookingHeaderTitle)
+        bookingHeaderTitle?.setTextColor(textColor)
+        
+        // Update button text colors
+        saveButton.setTextColor(android.graphics.Color.parseColor("#FFFFFF"))
+        cancelButton.setTextColor(textColor)
+        backButton.setTextColor(textColor)
+
+        // Update price summary background (remove light green background)
+        totalPriceText.setBackgroundColor(android.graphics.Color.parseColor("#252525"))
     }
 }
