@@ -1,3 +1,63 @@
 <resources>
-    <string name="app_name">RentACar</string>
+    <string name="app_name">Rent a Car</string>
+
+    <!-- Main Activity -->
+    <string name="main_title">🚗 Rent a Car</string>
+    <string name="main_subtitle">Find your perfect ride</string>
+    <string name="search_hint">🔍 Search cars...</string>
+    <string name="category_label">Category:</string>
+    <string name="available_cars">Available Cars</string>
+    <string name="no_results">No cars found matching your criteria</string>
+    <string name="tap_to_book">Tap to book →</string>
+
+    <!-- Booking Activity -->
+    <string name="booking_title">Complete Your Booking</string>
+    <string name="selected_car">Selected Car</string>
+    <string name="rental_period">📅 Rental Period</string>
+    <string name="customer_info">👤 Customer Information</string>
+    <string name="additional_options">🛡️ Additional Options</string>
+    <string name="price_summary">💰 Price Summary</string>
+
+    <!-- Input Hints -->
+    <string name="hint_full_name">Full Name</string>
+    <string name="hint_email">Email Address</string>
+    <string name="hint_phone">Phone Number</string>
+    <string name="hint_license">Driver License Number</string>
+    <string name="hint_age">Age:</string>
+
+    <!-- Buttons -->
+    <string name="button_back">←</string>
+    <string name="button_book_now">Book Now</string>
+    <string name="button_pickup">Pickup: Select Date</string>
+    <string name="button_return">Return: Select Date</string>
+
+    <!-- Validation Messages -->
+    <string name="error_name_required">Name is required</string>
+    <string name="error_email_invalid">Valid email is required</string>
+    <string name="error_phone_invalid">Valid phone number is required</string>
+    <string name="error_license_required">Driver license number is required</string>
+    <string name="error_return_date">Return date must be after pickup date</string>
+
+    <!-- Confirmation -->
+    <string name="confirm_title">Confirm Booking</string>
+    <string name="confirm_button">Confirm</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="booking_success">Booking confirmed! 🎉</string>
+
+    <!-- Insurance -->
+    <string name="insurance_option">Add Full Insurance Coverage (+15%)</string>
+
+    <!-- Car Features -->
+    <string name="feature_separator"> • </string>
+    <string name="rent_a_car">🚗 Rent a Car</string>
+    <string name="find_your_perfect_ride">Find your perfect ride</string>
+    <string name="search_cars">🔍 Search cars...</string>
+    <string name="category">Category:</string>
+    <string name="car_image">Car Image</string>
+    <string name="toyota_camry">Toyota Camry</string>
+    <string name="sedan">Sedan</string>
+    <string name="automatic_petrol">Automatic | Petrol</string>
+    <string name="_5_seats">5 seats</string>
+    <string name="gps_bluetooth_ac">GPS • Bluetooth • AC</string>
+    <string name="_45_day">$45/day</string>
 </resources>
