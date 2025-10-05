@@ -3,24 +3,10 @@ package com.example.rentacar
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.parcelize.Parcelize
 import androidx.core.graphics.toColorInt
-
-@Parcelize
-data class Car(
-    val name: String,
-    val model: String,
-    val year: Int,
-    val rating: Float,  // 1-5 stars
-    val kilometres: Int,
-    val dailyRentalCost: Double,
-    val imageResource: String = "",
-    var isFavorite: Boolean = false,
-    var isRented: Boolean = false
-) : Parcelable
+import com.example.rentacar.model.Car
 
 @SuppressLint("UseSwitchCompatOrMaterialCode")
 class MainActivity : AppCompatActivity() {

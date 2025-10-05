@@ -44,7 +44,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Complete Your Booking"
+                android:text="@string/complete_your_booking"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="#333333"
@@ -303,7 +303,7 @@
                 android:id="@+id/insuranceCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add Full Insurance Coverage (+15%)"
+                android:text="@string/add_full_insurance_coverage_15"
                 android:textSize="16sp"
                 android:padding="8dp" />
 

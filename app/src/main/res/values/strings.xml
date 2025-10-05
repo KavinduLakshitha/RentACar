@@ -1,10 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Rent a Car</string>
 
     <!-- Main Activity -->
     <string name="main_title">🚗 Rent a Car</string>
     <string name="main_subtitle">Find your perfect ride</string>
-    <string name="search_hint">🔍 Search cars...</string>
+    <string name="search_hint">🔍 Search cars…</string>
     <string name="category_label">Category:</string>
     <string name="available_cars">Available Cars</string>
     <string name="no_results">No cars found matching your criteria</string>
@@ -51,7 +52,7 @@
     <string name="feature_separator"> • </string>
     <string name="rent_a_car">🚗 Rent a Car</string>
     <string name="find_your_perfect_ride">Find your perfect ride</string>
-    <string name="search_cars">🔍 Search cars...</string>
+    <string name="search_cars">🔍 Search cars…</string>
     <string name="category">Category:</string>
     <string name="car_image">Car Image</string>
     <string name="toyota_camry">Toyota Camry</string>
@@ -62,4 +63,20 @@
     <string name="_45_day">$45/day</string>
     <string name="save_booking">Save Booking</string>
     <string name="cancel">Cancel</string>
+    <string name="add_full_insurance_coverage_15">Add Full Insurance Coverage (+15%)</string>
+    <string name="complete_your_booking">Complete Your Booking</string>
+
+    <!-- NEW: Additional strings needed for BookingActivity layout -->
+    <string name="rental_duration">Rental Duration</string>
+    <string name="number_of_days">Number of Days: </string>
+    <string name="initial_days">1</string>
+    <string name="days_suffix"> day(s)</string>
+    <string name="slider_description">Slide to select rental duration (1–7 days)</string>
+    <string name="customer_information">Customer Information</string>
+    <string name="price_breakdown_initial">Price Breakdown:\nBase cost: $0.00\nTotal: $0.00</string>
+
+    <!-- Autofill hints (translatable=false for system compatibility) -->
+    <string name="autofill_name" translatable="false">name</string>
+    <string name="autofill_email" translatable="false">emailAddress</string>
+    <string name="autofill_phone" translatable="false">phone</string>
 </resources>

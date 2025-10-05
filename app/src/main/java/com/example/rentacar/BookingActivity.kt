@@ -8,6 +8,8 @@ import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.rentacar.model.Car
+import androidx.core.graphics.toColorInt
 
 class BookingActivity : AppCompatActivity() {
 
@@ -100,7 +102,7 @@ class BookingActivity : AppCompatActivity() {
         backButton = findViewById(R.id.backButton)
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "DiscouragedApi")
     private fun setupCarDetails() {
         carNameText.text = "${selectedCar.name} ${selectedCar.model}"
         carTypeText.text = selectedCar.year.toString()
@@ -124,7 +126,7 @@ class BookingActivity : AppCompatActivity() {
                 // Fallback to placeholder if image not found
                 carImageView.setImageResource(android.R.drawable.ic_menu_gallery)
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             // Fallback to placeholder
             carImageView.setImageResource(android.R.drawable.ic_menu_gallery)
         }
@@ -194,14 +196,14 @@ class BookingActivity : AppCompatActivity() {
         // Change total price text color if there's an issue
         // Use appropriate colors based on dark mode
         val normalTextColor = if (isDarkMode) {
-            android.graphics.Color.parseColor("#E0E0E0") // Light for dark mode
+            "#E0E0E0".toColorInt() // Light for dark mode
         } else {
-            android.graphics.Color.parseColor("#333333") // Dark for light mode
+            "#333333".toColorInt() // Dark for light mode
         }
         
         val textColor = when {
             totalCost > maxRentalCost || totalCost > currentBalance ->
-                android.graphics.Color.parseColor("#C62828") // Red for errors (same in both modes)
+                "#C62828".toColorInt() // Red for errors (same in both modes)
             else -> normalTextColor
         }
         totalPriceText.setTextColor(textColor)
@@ -359,12 +361,12 @@ class BookingActivity : AppCompatActivity() {
     }
 
     private fun applyDarkMode() {
-        val bgColor = android.graphics.Color.parseColor("#121212")
-        val cardBgColor = android.graphics.Color.parseColor("#1E1E1E")
-        val textColor = android.graphics.Color.parseColor("#E0E0E0")
-        val secondaryTextColor = android.graphics.Color.parseColor("#B0B0B0")
-        val inputBgColor = android.graphics.Color.parseColor("#2C2C2C")
-        val hintColor = android.graphics.Color.parseColor("#888888")
+        val bgColor = "#121212".toColorInt()
+        val cardBgColor = "#1E1E1E".toColorInt()
+        val textColor = "#E0E0E0".toColorInt()
+        val secondaryTextColor = "#B0B0B0".toColorInt()
+        val inputBgColor = "#2C2C2C".toColorInt()
+        val hintColor = "#888888".toColorInt()
 
         // Apply to main scroll view
         mainScrollView.setBackgroundColor(bgColor)
@@ -467,11 +469,11 @@ class BookingActivity : AppCompatActivity() {
         bookingHeaderTitle?.setTextColor(textColor)
         
         // Update button text colors
-        saveButton.setTextColor(android.graphics.Color.parseColor("#FFFFFF"))
+        saveButton.setTextColor("#FFFFFF".toColorInt())
         cancelButton.setTextColor(textColor)
         backButton.setTextColor(textColor)
 
         // Update price summary background (remove light green background)
-        totalPriceText.setBackgroundColor(android.graphics.Color.parseColor("#252525"))
+        totalPriceText.setBackgroundColor("#252525".toColorInt())
     }
 }
